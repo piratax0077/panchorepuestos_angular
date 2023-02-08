@@ -1,0 +1,10 @@
+nav{
+    background-color: #45526e;
+}
+
+.avatar{
+    width: 50px;
+    border-radius: 100px;
+    margin-left: 400px;
+    padding-top: 15px;
+}

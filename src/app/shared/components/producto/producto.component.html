@@ -1,0 +1,157 @@
+<div *ngIf="loading == true; else elseBlock" class="text-center">
+    
+    <div class="spinner-grow text-danger" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="spinner-grow text-warning" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    
+    <div class="spinner-grow text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+<ng-template #elseBlock>
+    <div class="repuesto_tienda">
+      
+        <div class="row">
+            <div class="col-lg-5 col-md-6 col-sm-6">
+              <div class="modal-content">
+                <div class="modal-header" style="background: #eee;">
+                    <h5 class="modal-title lista_letra_pequeña" id="titulo_repuesto">{{repuesto.descripcion}}</h5>
+                </div>
+                    <div class="modal-body">
+                      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner" id="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="d-block w-100 fotos_repuesto zoom" src="https://panchoserver.ddns.net/storage/{{fotos[0].urlfoto}}" alt="First slide">
+                              </div>
+                            <div *ngFor="let f of fotos" class="carousel-item">
+                                <img src="https://panchoserver.ddns.net/storage/{{f.urlfoto}}" class="d-block w-100 fotos_repuesto zoom" alt="`+repuesto.descripcion+`">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" style="opacity: inherit;" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" style="opacity: inherit;" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
+                      </div>
+                    </div>
+                    
+                      
+                    
+               </div>
+                
+            </div>
+            <div class="col-lg-1 col-md-6 col-sm-6">
+              <div class="modal-content">
+                <div class="modal-header" style="background: #eee;">
+                  <h5 class="modal-title lista_letra_pequeña"></h5>
+                </div>
+                <div class="modal-body">
+                  <div class="row w-100" id="preview_photos" style="display: flex;
+                  justify-content: space-around;">
+                    
+                  </div>
+                </div>
+              </div>
+           
+             
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12">
+              <div class="mb-3">
+                <div class="modal-content">
+                  <div class="modal-header" style="background: #eee;">
+                    <h5 class="modal-title lista_letra_pequeña">Descripción</h5>
+                  </div>
+                    <table class="table">
+                        
+                      <tbody>
+                        <tr>
+                          <td>Código Interno</td>
+                          <th scope="row" id="codigo_interno_repuesto">{{repuesto.codigo_interno}}</th>
+                        </tr>
+                        <tr>
+                          <td>Familia</td>
+                          <th scope="row" id="familia_repuesto">{{repuesto.nombrefamilia}}</th>
+                        </tr>
+                        <tr>
+                          <td>Marca</td>
+                          <th scope="row" id="marca_repuesto">{{repuesto.marcarepuesto}}</th>
+                        </tr>
+                        <tr>
+                          <td scope="col">Stock actual</td>
+                          <td id="stock_actual">{{repuesto.stock_actual}}</td>
+                        </tr>
+                          <tr>
+                            <td scope="col">Precio</td>
+                            <td id="precio" class="letra_grande">{{repuesto.precio_venta | currency}}</td>
+                          </tr>
+                          <tr>
+                            <td scope="col">Cantidad</td>
+                            <td style="display: flex">
+                              <button class="btn btn-warning btn-sm" (click)="disminuir()">-</button>
+                              <input type="text" class="text-center" name="cantidad" id="cantidad" min="0" value="1" disabled>
+                              <button class="btn btn-warning btn-sm" (click)="aumentar()">+</button>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td scope="col">País de orígen</td>
+                            <td id="pais_origen">{{repuesto.nombre_pais}}</td>
+                          </tr>                    
+                      </tbody>
+                    </table>
+                    <div class="modal-footer" style="background: #eee;">
+                      <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalMedidas">Medidas </button>
+                      <button class="btn btn-success btn-sm" (click)="agregar_carrito()">Agregar al carro</button>
+                     </div>
+                 </div>
+                 
+              </div>
+              
+                <div class="modal-content">
+                  <div class="modal-header" style="background: #eee;">
+                      <h5 class="modal-title lista_letra_pequeña">Aplicaciones</h5>
+                  </div>
+                  <div class="modal-body">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Marca</th>
+                          <th scope="col">Modelo</th>
+                          <th scope="col">Años</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="container">
+                        <tr *ngFor="let s of similares | paginate: { itemsPerPage: 3, currentPage: p }">
+                            <td><img class="foto_marca" src="https://panchoserver.ddns.net/storage/{{s.urlfoto}}" /> </td>  
+                            <td><a href='/repuestos_modelo/{{s.id_modelo}}' class='a_titulo_producto'>{{s.modelonombre}}</a> </td>
+                            <td>{{s.anios_vehiculo}}</td>
+                            <td></td>
+                          </tr>
+                          
+                      </tbody>
+                      
+                    </table>
+                    <pagination-controls (pageChange)="p = $event" class="my-pagination"></pagination-controls>
+                  </div>
+            
+           </div>     
+            </div>
+        </div>
+        <hr>
+        <div class="container my-3">
+          <div class="row text-center">
+            <div class="col-md-6"><i class="fa-solid fa-circle-check icon_header text-success"></i> Despacho a domicilio</div>
+            <div class="col-md-6"><i class="fa-solid fa-circle-check icon_header text-success"></i> Retiro en tienda</div>
+          </div>
+        </div>
+        
+    </div>
+</ng-template>
+
+

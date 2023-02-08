@@ -1,0 +1,40 @@
+
+    <div id="buscador" class="mb-5">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                
+                <select name="" id="" class="form-control" (change)="onChange($event)">
+                    <option value="0">Seleccione marca</option>
+                    <option *ngFor="let m of marcas" value="{{m.idmarcavehiculo}}">{{m.marcanombre}}</option>
+                </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                
+                <select name="" id="" class="form-control" (change)="onChangeModelo($event)">
+                    <option value="0">Seleccione modelo</option>
+                    <option *ngFor="let m of modelos" value="{{m.id}}">{{m.modelonombre}}</option>
+                </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    
+                    <select name="" id="" class="form-control">
+                        <option value="0">Seleccione año</option>
+                        <option >{{anios}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+           
+                <button class="btn btn-danger w-100 text-white">Buscar</button>
+            </div>
+        </div>
+    </div>
+  
+    
+    
+

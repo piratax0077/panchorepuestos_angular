@@ -1,0 +1,202 @@
+<div *ngIf="loading == true; else elseBlock" class="text-center">
+    
+      <div class="spinner-grow text-danger" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div class="spinner-grow text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      
+      <div class="spinner-grow text-dark" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+</div>
+<ng-template #elseBlock>
+  <app-buscador></app-buscador>
+  <div class="row" >
+    <div class="col-md-3" id="contenedor">
+      <div class="modal-content mb-3">
+        <div class="modal-header" style="background: #eee;">
+            <h5 class="modal-title">Ordenar por:</h5>
+        </div>
+            <div class="modal-body">
+                <select class="form-control" name="sort_option" id="sort_option" (change)="ordenar()">
+                    <option value="0">Seleccione opción </option>
+                    <option value="1">Precio, Menor a Mayor</option>
+                    <option value="2">Precio, Mayor a Menor</option>
+                    <option value="3">Ordenados alfabéticamente A - Z</option>
+                    <option value="4">Ordenados alfabéticamente Z - A</option>
+                </select>
+            </div>
+        
+        </div>
+        <hr>
+        <div class="modal-content mb-3">
+          <div class="modal-header" style="background: #eee;">
+              <h5 class="modal-title">Precios</h5>
+          </div>
+              <div class="modal-body">
+                  <p>
+                      <label for="amount">Rango de precios:</label>
+                      <input type="text" id="amount" name="range" style="border: 0; color: #cd3a43; font-weight: bold;" />
+                      </p>
+                      <div id="slider-range" style="width:100%;"></div>
+                      <p><input type="button" (click)="filtrar_rango_precio()" class="btn btn-success btn-sm my-3" name="send" value="Buscar" /></p>
+              </div>
+          
+         </div>
+         <hr>
+        
+    </div>
+    <div class="col-md-9">
+      <div class="row">
+        
+        <div *ngFor="let r of repuestos | paginate: { itemsPerPage: 12, currentPage: p }" class="col-xl-4 col-md-4 col-sm-6 mb-3">
+            <div class="card" style="background-image: url('https://t3.ftcdn.net/jpg/00/98/52/26/360_F_98522695_S9vAeY8a3O4AYFUDr2WVlk4eCWrqf7hx.jpg'); background-size: cover;">
+            <a [routerLink]="[('/repuesto'),r.id]" class="a_titulo_producto"><img class="card-img-top repuestos_image_catalogo"  src="https://panchoserver.ddns.net/storage/{{r.urlfoto}}" alt="Card image cap"></a>
+            <div class="card-body">
+                <h6 class="card-title">{{r.descripcion}}</h6>
+                <p class="text-secondary text-uppercase">{{r.nombrefamilia}}</p>
+                <p class="text-secondary">{{r.marcarepuesto}}</p>
+                <p class="card-text text-center card-price letra_grande">$ {{r.precio_venta}}</p>
+                <p class="fst-italic">Stk. {{r.stock_actual}}</p>
+                
+                <button class="btn btn-warning w-100 mt-3" (click)="vista_rapida(r.id)" data-bs-toggle="modal" data-bs-target="#modalVistaRapida"><i class="fa-solid fa-eye icon_header"></i>Vista rápida </button>
+            </div>
+            </div>
+            </div>
+    </div>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+  
+  
+</ng-template>
+
+<!-- Modal -->
+
+  <div  class="modal fade" id="modalVistaRapida" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="mostrar_repuesto == true">
+            <div class="row">
+              <div class="col-md-6">
+                  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                      <div class="carousel-inner" id="carousel-inner">
+                        <div class="carousel-item active">
+                          <img class="d-block w-100 fotos_repuesto zoom" src="https://panchoserver.ddns.net/storage/{{fotos_repuesto[0].urlfoto}}" alt="First slide">
+                        </div>
+                        <div *ngIf="loading_modal == true; else otherdiv">
+                          <div class="spinner-grow text-danger" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          <div class="spinner-grow text-warning" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          
+                          <div class="spinner-grow text-dark" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                        </div>
+                        <ng-template #otherdiv>
+                          <div *ngFor="let foto of fotos_repuesto" class="carousel-item">
+                            <img src="https://panchoserver.ddns.net/storage/{{foto.urlfoto}}" class="d-block w-100 fotos_repuesto zoom" alt="`+repuesto.descripcion+`">
+                          </div>
+                        </ng-template>
+                      </div>
+                      <button class="carousel-control-prev" style="opacity: inherit;" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </button>
+                      <button class="carousel-control-next" style="opacity: inherit;" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                      </button>
+                    </div>
+                    <hr>
+                    <p style="    font-size: 20px;
+                    text-align: center;">Imagenes</p>
+                    <div class="row w-100" id="preview_photos" style="display: flex;
+                    justify-content: space-around;">
+                      
+                    </div>
+              </div>
+              
+              <div class="col-md-6">
+                  <table class="table">
+                      
+                      <tbody>
+                          <tr>
+                              <td>Código Interno</td>
+                              <th scope="row" class="letra_pequeña" id="codigo_interno_repuesto_">{{repuesto.codigo_interno}}</th>
+                            </tr>
+                          <tr>
+                              <td>Familia</td>
+                              <th scope="row" id="familia_repuesto">{{repuesto.nombrefamilia}}</th>
+                            </tr>
+                        <tr>
+                          <td>Marca</td>
+                          <th scope="row" id="marca_repuesto_">{{repuesto.marcarepuesto}}</th>
+                        </tr>
+                          <tr>
+                            <td scope="col">Precio</td>
+                            <td id="precio">{{repuesto.precio_venta}}</td>
+                          </tr>
+                          <tr>
+                            <td scope="col">Cantidad</td>
+                            <td style="display: flex;justify-content: space-between;">
+                              <button class="btn btn-warning btn-sm" onclick="disminuir()">-</button>
+                              <input type="text" class="text-center" name="cantidad" id="cantidad" min="0" value="1" disabled>
+                              <button class="btn btn-warning btn-sm" onclick="aumentar()">+</button>
+                              <a href="#" id="id_repuesto_detalle" class="fst-italic ml-5" style="font-size: 15px;">Ver detalle</a>
+                            </td>
+                          </tr>                   
+                      </tbody>
+                    </table>
+                    <p style="    font-size: 20px;
+                    text-align: center;">Compartir</p>
+                    <hr>
+                    <div id="botones_rrss" style="display: flex;
+                    justify-content: space-around;">
+                    
+                      <a target="_blank" id="enlace_facebook_compartir" class="btn btn-link btn-sm"><i class="fa-brands fa-facebook icon_header w-100" style="color: #1475e7;"></i></a>
+                      <a target="_blank" id="enlace_twitter_compartir" class="btn btn-link btn-sm"><i class="fa-brands fa-twitter icon_header w-100" style="color: #1d9bf0;"></i></a>
+                      <a target="_blank" id="enlace_email_compartir" class="btn btn-link btn-sm"><i class="fa-solid fa-envelope icon_header w-100" style="color: #0c7bd4;"></i></a>
+                    </div>
+                    <hr>
+                  <p style="    font-size: 20px;
+                  text-align: center;">Aplicaciones</p>
+                 
+                  <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Marca</th>
+                          <th scope="col">Modelo</th>
+                          <th scope="col">Años</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="container_">
+                        <div id="pagination_"></div>
+                      </tbody>
+                    </table>
+                    <input type="hidden" name="stock_repuesto" id="stock_repuesto">
+                    <input type="hidden" name="idrepuesto_modal" id="idrepuesto_modal">
+              </div>
+          </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
